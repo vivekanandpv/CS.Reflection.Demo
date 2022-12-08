@@ -8,26 +8,31 @@ namespace CS.Reflection.Demo
     {
         public string Make { get; set; }
         public string Model { get; set; }
+
+        public Car(string make, string model)
+        {
+            Make = make;
+            Model = model;
+        }
+
+        public void Drive(int distance)
+        {
+            Console.WriteLine($"Car is driving for {distance} km");
+        }
     }
 
     internal class Program
     {
         static void Main(string[] args)
         {
-            var car = new Car();
-            Type runtimeTypeInfo = car.GetType();
+            Type typeInfo = typeof(Car);
 
-            //  fields
-            FieldInfo[] fieldInfos = runtimeTypeInfo.GetFields();
+            //  activation
+            Car car = (Car)Activator.CreateInstance(typeInfo, "Honda", "City");
 
-            //  properties
-            PropertyInfo[] propertyInfos = runtimeTypeInfo.GetProperties();
-
-            //  methods
-            MethodInfo[] methodInfos = runtimeTypeInfo.GetMethods();
-
-            //  constructors
-            ConstructorInfo[] constructorInfos = runtimeTypeInfo.GetConstructors();
+            //  invoke
+            MethodInfo methodInfo = typeInfo.GetMethod("Drive");
+            methodInfo.Invoke(car, new object[] { 145 });
         }
     }
 }
