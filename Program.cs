@@ -14,27 +14,20 @@ namespace CS.Reflection.Demo
     {
         static void Main(string[] args)
         {
-            //  static or compile-time
-            Type compileTimeTypeInfo = typeof(Car);
-
-            //  runtime
             var car = new Car();
             Type runtimeTypeInfo = car.GetType();
 
-            //  current executing type
-            Type currentType = Assembly.GetExecutingAssembly().GetType("CS.Reflection.Demo.Program");
+            //  fields
+            FieldInfo[] fieldInfos = runtimeTypeInfo.GetFields();
 
-            //  arbitrary type information
-            Type intTypeInfo = Type.GetType("System.Int32, System.Private.CoreLib");
+            //  properties
+            PropertyInfo[] propertyInfos = runtimeTypeInfo.GetProperties();
 
-            //  generic type
-            Type genericDictionaryTypeInfo = typeof(Dictionary<,>);
-            Type genericListTypeInfo = typeof(List<>);
+            //  methods
+            MethodInfo[] methodInfos = runtimeTypeInfo.GetMethods();
 
-            //  array type
-            Type arrayTypeInfo = typeof(int[]);
-
-            Type typeTypeInfo = typeof(Type);
+            //  constructors
+            ConstructorInfo[] constructorInfos = runtimeTypeInfo.GetConstructors();
         }
     }
 }
