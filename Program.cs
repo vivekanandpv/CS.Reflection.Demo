@@ -4,26 +4,25 @@ using System.Reflection;
 
 namespace CS.Reflection.Demo
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property)]
     class PremiumAttribute : Attribute
     {
-        public int Value { get; set; }
+        public string Value { get; set; }
     }
 
 
     class Car
     {
-        [Premium(Value = 458)]
+        [Premium(Value = "Honda")]
         public string Make { get; set; }
 
+        [Premium(Value = "City")]
         public string Model { get; set; }
 
-        
+        public int Year { get; set; }
 
-        public void Drive(int distance)
-        {
-            Console.WriteLine($"Car is driving for {distance} km");
-        }
+        [Premium(Value = "Silver")]
+        public string Color { get; set; }
     }
 
     internal class Program
@@ -33,9 +32,17 @@ namespace CS.Reflection.Demo
             var car = new Car();
             Type typeInfo = car.GetType();
 
-            //  custom attributes
-            PropertyInfo propertyInfo = typeInfo.GetProperty("Make");
-            PremiumAttribute premiumAttributeInstance = propertyInfo.GetCustomAttribute<PremiumAttribute>();
+            PropertyInfo[] properties = typeInfo.GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                var attributeInstance = property.GetCustomAttribute<PremiumAttribute>();
+
+                if (attributeInstance != null)
+                {
+                    Console.WriteLine($"Property: {property.Name} --> {attributeInstance.Value}");
+                }
+            }
         }
     }
 }
