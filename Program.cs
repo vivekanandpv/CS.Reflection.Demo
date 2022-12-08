@@ -4,16 +4,21 @@ using System.Reflection;
 
 namespace CS.Reflection.Demo
 {
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    class PremiumAttribute : Attribute
+    {
+        public int Value { get; set; }
+    }
+
+
     class Car
     {
+        [Premium(Value = 458)]
         public string Make { get; set; }
+
         public string Model { get; set; }
 
-        public Car(string make, string model)
-        {
-            Make = make;
-            Model = model;
-        }
+        
 
         public void Drive(int distance)
         {
@@ -25,14 +30,12 @@ namespace CS.Reflection.Demo
     {
         static void Main(string[] args)
         {
-            Type typeInfo = typeof(Car);
+            var car = new Car();
+            Type typeInfo = car.GetType();
 
-            //  activation
-            Car car = (Car)Activator.CreateInstance(typeInfo, "Honda", "City");
-
-            //  invoke
-            MethodInfo methodInfo = typeInfo.GetMethod("Drive");
-            methodInfo.Invoke(car, new object[] { 145 });
+            //  custom attributes
+            PropertyInfo propertyInfo = typeInfo.GetProperty("Make");
+            PremiumAttribute premiumAttributeInstance = propertyInfo.GetCustomAttribute<PremiumAttribute>();
         }
     }
 }
